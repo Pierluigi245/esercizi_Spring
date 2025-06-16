@@ -1,0 +1,1 @@
+insert into user (nome , cognome) values ("Giovanni" , "Santoro") ;
