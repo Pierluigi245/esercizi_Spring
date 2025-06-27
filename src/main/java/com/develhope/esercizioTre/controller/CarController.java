@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -14,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -86,14 +87,22 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.OK).body(new APIResponse("element are deleted", true));
         }
 
+    @GetMapping("/FindBy")
+    public ResponseEntity<APIResponse> findByName(@RequestParam(required = false, defaultValue = "0") Integer pageNumber , @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) String modelName) {
+        Pageable pageable = PageRequest.of(pageNumber , pageSize, Sort.by("modelName")) ;
+        if(modelName!=null) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new APIResponse(carRepo.findByModelNameContains(modelName,pageable)));
+        }
 
-//    @GetMapping("/All")
-//    public ResponseEntity<APIResponse> getAllCar() {
-//        Pageable pageable = PageRequest.of(pageNumber , pageSize , Sort.by(""))
-//        carRepo.findAll(pageable)
-//
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(new APIResponse(carRepo.findAll()));
-//
-//    }
+        return ResponseEntity.ok(new APIResponse(carRepo.findAll(pageable)));
+
+    }
 }
+
+
+
+
+
+
+

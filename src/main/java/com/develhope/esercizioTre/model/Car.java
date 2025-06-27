@@ -25,6 +25,7 @@ public class Car {
     @Column(length = 2000)
     private String description ;
 
+
     //costruttori
     private Car() {
     }
